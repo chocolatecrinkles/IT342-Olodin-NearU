@@ -1,0 +1,69 @@
+############################
+# IDEs & Editors
+############################
+
+# IntelliJ / Android Studio
+.idea/
+*.iml
+
+# VS Code
+.vscode/
+
+############################
+# OS (Windows)
+############################
+
+Thumbs.db
+desktop.ini
+
+############################
+# Logs & crash dumps
+############################
+
+*.log
+hs_err_pid*
+replay_pid*
+
+############################
+# Backend (Spring Boot / Maven)
+############################
+
+# Maven build output
+backend/**/target/
+
+# Spring Boot config with secrets
+backend/**/application.properties
+backend/**/application-*.properties
+
+############################
+# Android (Kotlin)
+############################
+
+# Gradle
+**/build/
+.gradle/
+
+# Android local SDK config
+local.properties
+
+# Android Studio generated
+*.apk
+*.aab
+
+############################
+# Web (React)
+############################
+
+# Node dependencies
+node_modules/
+
+# Build outputs
+dist/
+build/
+
+############################
+# Environment files
+############################
+
+.env
+.env.*
