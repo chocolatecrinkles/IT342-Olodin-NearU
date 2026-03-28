@@ -10,7 +10,13 @@ export async function register(user) {
         body: JSON.stringify(user)
     });
 
-    return response.json();
+    const data = await response.json();
+
+    if (!response.ok) {
+        throw new Error(data.message);
+    }
+
+    return data;
 }
 
 export async function login(credentials) {
@@ -23,5 +29,11 @@ export async function login(credentials) {
         body: JSON.stringify(credentials)
     });
 
-    return response.json();
+    const data = await response.json();
+
+    if (!response.ok) {
+        throw new Error(data.message);
+    }
+
+    return data;
 }
