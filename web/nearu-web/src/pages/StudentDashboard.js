@@ -1,21 +1,24 @@
-import { useNavigate } from "react-router-dom"
+import { useState } from "react"
+import Listings from "./Listings"
 
-function Dashboard(){
-    const navigate = useNavigate()
+function StudentDashboard() {
 
-    const handleLogout = () => {
-        localStorage.removeItem("user")
-        navigate("/")
-    }
+    const [search, setSearch] = useState("")
 
-    return(
+    return (
         <div>
-            <h2>Student Dashboard</h2>
-            <p>Login successful.</p>
+            <h2>Explore NearU</h2>
 
-            <button onClick={ handleLogout }>Logout</button>
+            <input
+                type="text"
+                placeholder="Search listings..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+            />
+
+            <Listings search={search} />
         </div>
-    );
+    )
 }
 
-export default Dashboard;
+export default StudentDashboard

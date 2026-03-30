@@ -2,9 +2,9 @@ import { useState, useEffect } from "react"
 
 const API = "http://localhost:8080/api/listings"
 
-function Listings() {
+function Listings({ search }) {
 
-    const [listings, setListings] = useState([]);
+    const [listings, setListings] = useState([])
 
     useEffect(() => {
         fetch(API)
@@ -12,19 +12,23 @@ function Listings() {
             .then(data => setListings(data))
     }, [])
 
+    const filtered = listings.filter(l =>
+        l.name.toLowerCase().includes(search.toLowerCase())
+    )
+
     return (
         <div>
-            <h2>Listings</h2>
-
-            {listings.map(l => (
+            {filtered.map(l => (
                 <div key={l.id}>
                     <h3>{l.name}</h3>
                     <p>{l.address}</p>
-                    <p>Price: {l.price}</p>
+                    <p>{l.price}</p>
+
+                    <button>Bookmark</button>
                 </div>
             ))}
         </div>
     )
 }
 
-export default Listings;
+export default Listings
