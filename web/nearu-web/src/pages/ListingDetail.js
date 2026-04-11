@@ -1,14 +1,14 @@
-import { useParams } from "react-router-dom"
 import { useEffect, useState } from "react"
 
-function ListingDetail() {
-    const { id } = useParams()
+function ListingDetail({ id }) {
 
     const [listing, setListing] = useState(null)
     const [images, setImages] = useState([])
     const [currentIndex, setCurrentIndex] = useState(0)
 
     useEffect(() => {
+        if (!id) return
+
         fetch(`http://localhost:8080/api/listings`)
             .then(res => res.json())
             .then(data => {
@@ -18,28 +18,31 @@ function ListingDetail() {
 
         fetch(`http://localhost:8080/api/listings/${id}/images`)
             .then(res => res.json())
-            .then(data => setImages(data))
+            .then(data => {
+                setImages(data)
+                setCurrentIndex(0) // reset carousel when switching listing
+            })
+
     }, [id])
 
     const nextImage = () => {
-        setCurrentIndex((prev) =>
+        setCurrentIndex(prev =>
             prev === images.length - 1 ? 0 : prev + 1
         )
     }
 
     const prevImage = () => {
-        setCurrentIndex((prev) =>
+        setCurrentIndex(prev =>
             prev === 0 ? images.length - 1 : prev - 1
         )
     }
 
-    if (!listing) return <p>Loading...</p>
+    if (!listing) return <p style={{ padding: "20px" }}>Loading...</p>
 
     return (
-        <div>
+        <div style={{ padding: "20px" }}>
             <h2>{listing.name}</h2>
 
-            {/* IMAGE CAROUSEL */}
             {images.length > 0 && (
                 <div>
                     <button onClick={prevImage}>◀</button>
@@ -55,10 +58,10 @@ function ListingDetail() {
 
             <p><b>Category:</b> {listing.category}</p>
             <p><b>Address:</b> {listing.address}</p>
-            <p><b>Price:</b> {listing.price}</p>
+            <p><b>Price:</b> ₱ {listing.price.toLocaleString()}</p>
             <p><b>Description:</b> {listing.description}</p>
         </div>
     )
 }
 
-export default ListingDetail
+export default ListingDetail;
