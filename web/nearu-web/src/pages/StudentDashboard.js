@@ -2,10 +2,12 @@ import { useState } from "react"
 import Listings from "./Listings"
 import { useNavigate } from "react-router-dom"
 import "./css/StudentDashboard.css"
+import ListingDetail from "./ListingDetail"
 
 function StudentDashboard() {
   const navigate = useNavigate()
   const [search, setSearch] = useState("")
+  const [selectedListingId, setSelectedListingId] = useState(null)
   const [filters, setFilters] = useState({
     categories: []
   })
@@ -29,7 +31,6 @@ function StudentDashboard() {
 
   return (
     <div className="student-layout">
-      {/* Header matches image_971389 */}
       <header className="header">
         <div className="logo-text">NearU</div>
         <nav className="nav-group">
@@ -43,47 +44,75 @@ function StudentDashboard() {
 
       <main className="main-content">
         <aside className="sidebar">
-          <div className="search-bar-container">
-            <input
-              className="search-input"
-              type="text"
-              placeholder="Search"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#666" strokeWidth="2">
-              <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
-          </div>
-
-          <div className="filter-tags-container">
-            {["BOARDING_HOUSE", "DORM", "RESTAURANT", "CAFE", "LAUNDROMAT"].map(cat => (
-              <label key={cat} className="filter-chip">
+          {!selectedListingId && (
+            <>
+              <div className="search-bar-container">
                 <input
-                  type="checkbox"
-                  hidden
-                  checked={filters.categories.includes(cat)}
-                  onChange={() => handleCategoryChange(cat)}
+                  className="search-input"
+                  type="text"
+                  placeholder="Search"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
                 />
-                <span className={`chip-text ${filters.categories.includes(cat) ? 'active' : ''}`}>
-                  {cat.replace("_", " ")}
-                </span>
-              </label>
-            ))}
-          </div>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#666" strokeWidth="2">
+                  <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+              </div>
 
-          {/* Scrollable Listings Area */}
+            
+              <div className="filter-tags-container">
+                {["BOARDING_HOUSE", "DORM", "RESTAURANT", "CAFE", "LAUNDROMAT"].map(cat => (
+                  <label key={cat} className="filter-chip">
+                    <input
+                      type="checkbox"
+                      hidden
+                      checked={filters.categories.includes(cat)}
+                      onChange={() => handleCategoryChange(cat)}
+                    />
+                    <span className={`chip-text ${filters.categories.includes(cat) ? 'active' : ''}`}>
+                      {cat.replace("_", " ")}
+                    </span>
+                  </label>
+                ))}
+              </div>
+            </>
+          )}
+
           <div className="sidebar-listings-scroll">
-             <Listings search={search} filters={filters} />
+
+            {selectedListingId ? (
+              <>
+                <button 
+                  onClick={() => setSelectedListingId(null)} 
+                  style={{ marginBottom: "10px" }}
+                >
+                  ← Back
+                </button>
+
+                <ListingDetail id={selectedListingId} />
+              </>
+            ) : (
+              <Listings 
+                search={search} 
+                filters={filters} 
+                onSelectListing={setSelectedListingId}
+              />
+            )}
+
           </div>
           
-          <button className="clear-filters-link" onClick={() => setFilters({ categories: [] })}>
-            Clear all filters
-          </button>
+          {!selectedListingId && (
+            <button 
+              className="clear-filters-link" 
+              onClick={() => setFilters({ categories: [] })}
+            >
+              Clear all filters
+            </button>
+          )}
         </aside>
 
-        {/* Map area with grid */}
         <section className="map-view">
+          
         </section>
       </main>
     </div>

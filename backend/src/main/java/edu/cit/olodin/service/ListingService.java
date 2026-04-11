@@ -91,6 +91,7 @@ public class ListingService {
         listing.setPrice(req.price);
         listing.setLatitude(req.latitude);
         listing.setLongitude(req.longitude);
+        listing.setDescription(req.description);
 
         return listingRepository.save(listing);
     }

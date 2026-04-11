@@ -4,7 +4,7 @@ import "./css/Listings.css"
 
 const API = "http://localhost:8080/api/listings"
 
-function Listings({ search, filters }) {
+function Listings({ search, filters, onSelectListing }) {
     const navigate = useNavigate()
     const [listings, setListings] = useState([])
     const [images, setImages] = useState({})
@@ -54,7 +54,7 @@ function Listings({ search, filters }) {
     return (
         <div className="listings-results-container">
             {filtered.map(l => (
-                <div key={l.id} className="student-listing-card" onClick={() => navigate(`/listing/${l.id}`)}>
+                <div key={l.id} className="student-listing-card" onClick={() => onSelectListing(l.id)}>
                     
                     <div className="card-header-row">
                         <h3 className="listing-title">{l.name}</h3>
@@ -83,7 +83,15 @@ function Listings({ search, filters }) {
 
                     <div className="card-footer-row">
                         <span className="listing-price">₱ {l.price.toLocaleString()}</span>
-                        <button className="view-details-btn">View</button>
+                        <button 
+                            className="view-details-btn"
+                            onClick={(e) => {
+                                e.stopPropagation()
+                                onSelectListing(l.id)
+                            }}
+                            >
+                            View
+                            </button>
                     </div>
                 </div>
             ))}

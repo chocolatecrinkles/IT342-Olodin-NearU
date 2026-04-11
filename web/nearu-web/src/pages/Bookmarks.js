@@ -67,11 +67,10 @@ function Bookmarks() {
                             <div 
                                 key={b.id} 
                                 className="bookmark-card" 
-                                onClick={() => navigate(`/listing/${b.listingId}`)}
+                                onClick={() => navigate(`/listing/view/${b.listingId}`)}
                             >
                                 <div className="card-header">
                                     <h3 className="listing-name">{listing.name}</h3>
-                                    {/* The Gray Category Box */}
                                     <div className="category-box">{listing.category}</div>
                                 </div>
 

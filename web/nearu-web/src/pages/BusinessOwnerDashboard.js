@@ -1,22 +1,24 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import BusinessOwnerListings from "./BusinessOwnerListings";
+import ListingDetail from "./ListingDetail";
 import "./css/BusinessOwnerDashboard.css"; 
 
 function BusinessOwnerDashboard() {
   const navigate = useNavigate();
+  const [selectedListingId, setSelectedListingId] = useState(null);
 
   const handleLogout = () => {
-    localStorage.removeItem("user");
+    localStorage.removeItem("token");
     navigate("/");
   };
 
   return (
     <div className="dashboard-container">
-      {/* Header Section */}
       <header className="header">
         <div className="logo-text">NearU</div>
         <nav className="nav-links">
-          <button className="nav-item active" onClick={() => navigate("/")}>Home</button>
+          <button className="nav-item active" onClick={() => navigate("/businessowner")}>Home</button>
           <button className="nav-item" onClick={() => navigate("/businessowner/list")}>Listings</button>
           <button className="nav-item">Profile</button>
           <div style={{ width: '1px', height: '20px', backgroundColor: '#999', margin: '0 5px' }}></div>
@@ -24,22 +26,32 @@ function BusinessOwnerDashboard() {
         </nav>
       </header>
 
-      {/* Body Section */}
       <main className="main-content">
-        {/* Sidebar */}
         <aside className="sidebar">
-          <p className="empty-state-text">You have no listing yet.</p>
-          
-          <button 
-            className="create-listing-btn" 
-            onClick={() => navigate("/businessowner/add")}
-          >
-            + Create a Listing
-          </button>
+          {selectedListingId ? (
+            <>
+              <button 
+                onClick={() => setSelectedListingId(null)}
+                style={{ cursor: "pointer", background: "none", border: "none", color: "#4a5d79", fontWeight: "bold", width: "120px ", height: "30px" }}
+              >
+                ← Back to List
+              </button>
+              <ListingDetail id={selectedListingId} />
+            </>
+          ) : (
+            <>
+              <BusinessOwnerListings onSelectListing={setSelectedListingId} />
+              <button 
+                className="create-listing-btn" 
+                onClick={() => navigate("/businessowner/add")}
+              >
+                + Create a Listing
+              </button>
+            </>
+          )}
         </aside>
 
-        <section className="map-view">
-        </section>
+        <section className="map-view"></section>
       </main>
     </div>
   );

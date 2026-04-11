@@ -4,7 +4,7 @@ import "./css/MyListings.css"
 
 const API = "http://localhost:8080/api/listings"
 
-function MyListings() {
+function OwnerListingsPage({ onSelectListing }) {
     const [listings, setListings] = useState([])
     const [editingId, setEditingId] = useState(null)
     const [editData, setEditData] = useState({})
@@ -80,7 +80,7 @@ function MyListings() {
 
                 <div className="listings-grid">
                     {listings.map(l => (
-                        <div key={l.id} className="listing-card">
+                        <div key={l.id} className="listing-card" onClick={() => navigate(`/businessowner/list/${l.id}`)} style={{ cursor: "pointer" }}>
                             {editingId === l.id ? (
                                 <div className="edit-form-overlay">
                                     <input className="edit-input" name="name" value={editData.name} onChange={handleChange} />
@@ -108,4 +108,4 @@ function MyListings() {
     )
 }
 
-export default MyListings;
+export default OwnerListingsPage;
