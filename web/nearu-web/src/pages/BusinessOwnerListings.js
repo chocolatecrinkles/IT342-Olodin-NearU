@@ -13,6 +13,28 @@ function BusinessOwnerListings({ onSelectListing }) {
         .catch(err => console.error(err));
     }, [token]);
 
+    const displayPrice = (listing) => {
+        if (!listing) return "N/A"
+
+        if (listing.pricingType === "RANGE") {
+            if (listing.minPrice != null && listing.maxPrice != null) {
+            return `₱ ${listing.minPrice.toLocaleString()} - ${listing.maxPrice.toLocaleString()}`
+            }
+            return "N/A"
+        }
+
+        if (listing.price != null) {
+            const base = `₱ ${listing.price.toLocaleString()}`
+
+            if (listing.pricingType === "MONTHLY") return base + " / month"
+            if (listing.pricingType === "WEEKLY") return base + " / week"
+
+            return base
+        }
+
+        return "N/A"
+    }
+
     return (
         <div className="sidebar-list-container">
             {listings.length === 0 ? (
@@ -27,7 +49,7 @@ function BusinessOwnerListings({ onSelectListing }) {
                         <h3 className="card-title">{l.name}</h3>
                         <div className="card-img-placeholder"></div>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <p style={{ margin: 0, fontWeight: 'bold' }}>₱ {l.price.toLocaleString()}</p>
+                            <p style={{ margin: 0, fontWeight: 'bold' }}>{displayPrice(l)}</p>
                             <button style={{ background: 'white', border: '1px solid #ccc', padding: '4px 12px', borderRadius: '4px', fontSize: '12px', cursor: 'pointer' }}>
                                 Edit
                             </button>

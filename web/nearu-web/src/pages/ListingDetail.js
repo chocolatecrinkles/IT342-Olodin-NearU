@@ -20,7 +20,7 @@ function ListingDetail({ id }) {
             .then(res => res.json())
             .then(data => {
                 setImages(data)
-                setCurrentIndex(0) // reset carousel when switching listing
+                setCurrentIndex(0) 
             })
 
     }, [id])
@@ -38,6 +38,28 @@ function ListingDetail({ id }) {
     }
 
     if (!listing) return <p style={{ padding: "20px" }}>Loading...</p>
+
+    const displayPrice = (listing) => {
+        if (!listing) return "N/A"
+
+        if (listing.pricingType === "RANGE") {
+            if (listing.minPrice != null && listing.maxPrice != null) {
+            return `₱ ${listing.minPrice.toLocaleString()} - ${listing.maxPrice.toLocaleString()}`
+            }
+            return "N/A"
+        }
+
+        if (listing.price != null) {
+            const base = `₱ ${listing.price.toLocaleString()}`
+
+            if (listing.pricingType === "MONTHLY") return base + " / month"
+            if (listing.pricingType === "WEEKLY") return base + " / week"
+
+            return base
+        }
+
+        return "N/A"
+    }
 
     return (
         <div style={{ padding: "20px" }}>
@@ -58,7 +80,7 @@ function ListingDetail({ id }) {
 
             <p><b>Category:</b> {listing.category}</p>
             <p><b>Address:</b> {listing.address}</p>
-            <p><b>Price:</b> ₱ {listing.price.toLocaleString()}</p>
+            <p><b>Price:</b>{displayPrice(listing)}</p>
             <p><b>Description:</b> {listing.description}</p>
         </div>
     )

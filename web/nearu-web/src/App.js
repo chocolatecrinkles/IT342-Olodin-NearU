@@ -9,6 +9,20 @@ import Bookmarks from "./pages/Bookmarks"
 import ListingDetail from "./pages/ListingDetail"
 import BusinessOwnerListingDetailPage from "./pages/BusinessOwnerListingDetailPage"
 import ListingDetailPage from "./pages/ListingDetailPage"
+import "leaflet/dist/leaflet.css";
+import L from "leaflet";
+import markerIcon from "leaflet/dist/images/marker-icon.png";
+import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
+import markerShadow from "leaflet/dist/images/marker-shadow.png";
+import SelectRole from "./pages/SelectRole";
+
+delete L.Icon.Default.prototype._getIconUrl;
+
+L.Icon.Default.mergeOptions({
+  iconUrl: markerIcon,
+  iconRetinaUrl: markerIcon2x, 
+  shadowUrl: markerShadow,
+});
 
 function App() {
 
@@ -33,6 +47,8 @@ function App() {
         <Route path="/listing/view/:id" element={<ListingDetailPage />} />
 
         <Route path="/listing/:id" element={<ListingDetail />} />
+
+        <Route path="/select-role" element={<SelectRole />} />
       </Routes>
 
     </BrowserRouter>

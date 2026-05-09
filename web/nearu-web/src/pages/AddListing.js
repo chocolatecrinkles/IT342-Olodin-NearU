@@ -1,10 +1,23 @@
 import { useState } from "react";
 import "./css/AddListing.css";
 import { useNavigate } from "react-router-dom"
+import MapSelector from "./MapSelector"
 
 const API = "http://localhost:8080/api/listings";
 
 function AddListing() {
+  const CATEGORY_OPTIONS = {
+    ACCOMMODATION: ["BOARDING_HOUSE", "DORM"],
+    SERVICE: ["RESTAURANT", "CAFE", "LAUNDROMAT"],
+    OTHER: ["OTHER"]
+  }
+
+  const PRICING_OPTIONS = {
+    ACCOMMODATION: ["MONTHLY", "WEEKLY"],
+    SERVICE: ["RANGE"],
+    OTHER: ["RANGE"]
+  }
+
   const navigate = useNavigate();
   const [files, setFiles] = useState([]);
   const [listing, setListing] = useState({
@@ -13,6 +26,9 @@ function AddListing() {
     listingType:"",
     address: "",
     price: "",
+    minPrice: "",
+    maxPrice: "",
+    pricingType: "",
     latitude: "",
     longitude: "",
     description: "",
@@ -30,9 +46,26 @@ function AddListing() {
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    if (!listing.name || !listing.category || !listing.address || !listing.price || !listing.listingType) {
+    if (!listing.name || !listing.category || !listing.address || !listing.listingType || !listing.pricingType) {
       alert("Please fill required fields")
       return
+    }
+
+    if (listing.pricingType === "RANGE") {
+      if (!listing.minPrice || !listing.maxPrice) {
+        alert("Please enter price range")
+        return
+      }
+
+      if (listing.minPrice > listing.maxPrice) {
+        alert("Min price cannot be greater than max price")
+        return
+      }
+    } else {
+      if (!listing.price || listing.price <= 0) {
+        alert("Price must be greater than 0")
+        return
+      }
     }
 
     const token = localStorage.getItem("token")
@@ -83,6 +116,13 @@ function AddListing() {
     }
   }
 
+  const formatText = (text) => {
+    return text
+      ?.toLowerCase()
+      .replace("_", " ")
+      .replace(/\b\w/g, c => c.toUpperCase())
+  }
+
   return (
     <div className="add-listing-layout">
       <div className="layout-content-wrapper">
@@ -90,6 +130,7 @@ function AddListing() {
           <div className="listing-head">
             <input
               name="name"
+              value={listing.name}
               placeholder="Name"
               onChange={handleChange}
               className="listing-name-input"
@@ -97,25 +138,40 @@ function AddListing() {
 
             <select
               name="listingType"
-              onChange={handleChange}
-              className="listing-type-select"
+              value={listing.listingType || ""}
+              onChange={(e) => {
+                const newType = e.target.value
+
+                setListing(prev => ({
+                  ...prev,
+                  listingType: newType,
+                  category: "",      
+                  pricingType: "",
+                  price: "",   
+                }))
+              }}
             >
-              <option value="">Select type</option>
+              <option value="">Select Type</option>
               <option value="ACCOMMODATION">Accommodation</option>
               <option value="SERVICE">Service</option>
+              <option value="OTHER">Other</option>
             </select>
 
             <select
               name="category"
-              onChange={handleChange}
-              className="listing-category-select"
+              value={listing.category || ""}
+              onChange={(e) => setListing({ ...listing, category: e.target.value })}
+              disabled={!listing.listingType} 
             >
-              <option value="">Select category</option>
-              <option value="BOARDING_HOUSE">Boarding House</option>
-              <option value="DORM">Dorm</option>
-              <option value="RESTAURANT">Restaurant</option>
-              <option value="CAFE">Cafe</option>
-              <option value="LAUNDROMAT">Laundromat</option>
+              <option value="">Select Category</option>
+
+              {listing.listingType &&
+                CATEGORY_OPTIONS[listing.listingType].map(cat => (
+                  <option key={cat} value={cat}>
+                    {formatText(cat)}
+                  </option>
+                ))
+              }
             </select>
           </div>
 
@@ -159,32 +215,111 @@ function AddListing() {
           </div>
 
           <div className="form-group">
-            <label>Price</label>
-            <div className="price-input-wrapper">
+
+            <select
+              name="pricingType"
+              value={listing.pricingType || ""}
+              onChange={(e) => {
+                const newPricing = e.target.value
+
+                setListing(prev => ({
+                  ...prev,
+                  pricingType: newPricing,
+                  price: "",
+                  minPrice: "",
+                  maxPrice: ""
+                }))
+              }}
+              disabled={!listing.listingType}
+            >
+              <option value="">Select Pricing</option>
+
+              {listing.listingType &&
+                PRICING_OPTIONS[listing.listingType].map(p => (
+                  <option key={p} value={p}>
+                    {formatText(p)}
+                  </option>
+                ))
+              }
+            </select>
+
+            {listing.pricingType === "RANGE" ? (
+              <div style={{ display: "flex", gap: "10px" }}>
+                
+                <input
+                  type="number"
+                  placeholder="Min Price"
+                  value={listing.minPrice || ""}
+                  onChange={(e) => setListing({
+                    ...listing,
+                    minPrice: Number(e.target.value)
+                  })}
+                />
+
+                <input
+                  type="number"
+                  placeholder="Max Price"
+                  value={listing.maxPrice || ""}
+                  onChange={(e) => setListing({
+                    ...listing,
+                    maxPrice: Number(e.target.value)
+                  })}
+                />
+
+              </div>
+            ) : (
               <input
-                name="price"
                 type="number"
-                placeholder="00,000"
-                onChange={handleChange}
-                className="price-input"
+                placeholder={
+                  listing.pricingType === "MONTHLY"
+                    ? "Price per month"
+                    : listing.pricingType === "WEEKLY"
+                    ? "Price per week"
+                    : "Enter price"
+                }
+                value={listing.price || ""}
+                onChange={(e) => setListing({
+                  ...listing,
+                  price: Number(e.target.value)
+                })}
+                disabled={!listing.pricingType}
               />
-            </div>
+            )}
+
           </div>
 
           <div className="form-group">
             <label>Address</label>
             <input
               name="address"
+              value={listing.address}
               placeholder="Address"
               onChange={handleChange}
               className="address-input"
             />
+
+            <label>Select Location</label>
+
+            <MapSelector
+              onSelect={(pos) => {
+                setListing({
+                  ...listing,
+                  latitude: pos[0],
+                  longitude: pos[1],
+                });
+              }}
+            />
+
+            <p style={{ fontSize: "12px", color: "#666" }}>
+              Selected: {listing.latitude}, {listing.longitude}
+            </p>
           </div>
 
           <div className="form-group">
             <label>Description</label>
             <textarea
               name="description"
+              value={listing.description}
               placeholder="Description"
               onChange={handleChange}
               className="description-input"

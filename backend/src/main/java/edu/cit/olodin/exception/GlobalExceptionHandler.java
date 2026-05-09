@@ -1,6 +1,7 @@
 package edu.cit.olodin.exception;
 
 import edu.cit.olodin.dto.ErrorResponse;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,8 +10,34 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(AuthException.class)
     public ResponseEntity<ErrorResponse> handleAuth(AuthException ex) {
+
+        HttpStatus status;
+
+        switch (ex.getErrorCode()) {
+
+            case "AUTH_UNAUTHORIZED":
+                status = HttpStatus.FORBIDDEN;
+                break;
+
+            case "AUTH_USER_NOT_FOUND":
+            case "LISTING_NOT_FOUND":
+            case "BOOKMARK_NOT_FOUND":
+                status = HttpStatus.NOT_FOUND;
+                break;
+
+            case "AUTH_INVALID_PASSWORD":
+            case "AUTH_EMAIL_EXISTS":
+            case "BOOKMARK_EXISTS":
+            case "VALIDATION_ERROR":
+                status = HttpStatus.BAD_REQUEST;
+                break;
+
+            default:
+                status = HttpStatus.BAD_REQUEST;
+        }
+
         return ResponseEntity
-                .status(401)
+                .status(status)
                 .body(new ErrorResponse(ex.getMessage(), ex.getErrorCode()));
     }
 

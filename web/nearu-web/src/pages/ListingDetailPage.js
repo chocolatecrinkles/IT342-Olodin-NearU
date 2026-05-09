@@ -22,6 +22,28 @@ function ListingDetailPage() {
             .then(data => setImages(data))
     }, [id])
 
+    const displayPrice = (listing) => {
+        if (!listing) return "N/A"
+
+        if (listing.pricingType === "RANGE") {
+            if (listing.minPrice != null && listing.maxPrice != null) {
+            return `₱ ${listing.minPrice.toLocaleString()} - ${listing.maxPrice.toLocaleString()}`
+            }
+            return "N/A"
+        }
+
+        if (listing.price != null) {
+            const base = `₱ ${listing.price.toLocaleString()}`
+
+            if (listing.pricingType === "MONTHLY") return base + " / month"
+            if (listing.pricingType === "WEEKLY") return base + " / week"
+
+            return base
+        }
+
+        return "N/A"
+    }
+
     if (!listing) return <p>Loading...</p>
 
     return (
@@ -62,8 +84,8 @@ function ListingDetailPage() {
                 </div>
 
                 <div className="info-section">
-                    <span className="label-text">₱ Price</span>
-                    <div className="underline-display">₱ {listing.price.toLocaleString()}</div>
+                    <span className="label-text">Price</span>
+                    <div className="underline-display">{displayPrice(listing)}</div>
 
                     <span className="label-text">Description</span>
                     <div className="underline-display">{listing.description}</div>

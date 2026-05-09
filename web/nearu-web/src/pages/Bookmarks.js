@@ -32,6 +32,60 @@ function Bookmarks() {
         navigate("/")
     }
 
+    const removeBookmark = async (bookmarkId) => {
+        await fetch(`http://localhost:8080/api/bookmarks/${bookmarkId}`, {
+            method: "DELETE",
+            headers: { Authorization: "Bearer " + token }
+        })
+
+        setBookmarks(prev => prev.filter(b => b.id !== bookmarkId))
+    }
+
+    const filteredBookmarks = bookmarks.filter(b => {
+        const listing = listings[b.listingId]
+        if (!listing) return false
+
+        if (activeTab === "All") return true
+
+        if (activeTab === "Accommodation") {
+            return listing.listingType === "ACCOMMODATION"
+        }
+
+        if (activeTab === "Services") {
+            return listing.listingType === "SERVICE"
+        }
+
+        return true
+    })
+
+    const formatText = (text) => {
+        return text
+        .replace("_", " ")
+        .replace(/\b\w/g, c => c.toUpperCase())
+    }
+
+    const displayPrice = (listing) => {
+        if (!listing) return "N/A"
+
+        if (listing.pricingType === "RANGE") {
+            if (listing.minPrice != null && listing.maxPrice != null) {
+            return `₱ ${listing.minPrice.toLocaleString()} - ${listing.maxPrice.toLocaleString()}`
+            }
+            return "N/A"
+        }
+
+        if (listing.price != null) {
+            const base = `₱ ${listing.price.toLocaleString()}`
+
+            if (listing.pricingType === "MONTHLY") return base + " / month"
+            if (listing.pricingType === "WEEKLY") return base + " / week"
+
+            return base
+        }
+
+        return "N/A"
+    }
+
     return (
         <div className="bookmarks-layout">
             <header className="header">
@@ -47,7 +101,7 @@ function Bookmarks() {
 
             <main className="bookmarks-content">
                 <div className="filter-tabs">
-                    {["All", "Accomodation", "Services"].map(tab => (
+                    {["All", "Accommodation", "Services"].map(tab => (
                         <div 
                             key={tab} 
                             className={`tab ${activeTab === tab ? 'active' : ''}`}
@@ -59,7 +113,7 @@ function Bookmarks() {
                 </div>
 
                 <div className="bookmarks-grid">
-                    {bookmarks.map(b => {
+                    {filteredBookmarks.map(b => {
                         const listing = listings[b.listingId]
                         if (!listing) return null
 
@@ -71,7 +125,7 @@ function Bookmarks() {
                             >
                                 <div className="card-header">
                                     <h3 className="listing-name">{listing.name}</h3>
-                                    <div className="category-box">{listing.category}</div>
+                                    <div className="category-box">{formatText(listing.category)}</div>
                                 </div>
 
                                 <div className="card-image-placeholder">
@@ -81,13 +135,27 @@ function Bookmarks() {
                                 </div>
 
                                 <p className="price-text">
-                                    ₱ {listing.price.toLocaleString()} 
-                                    <span className="price-subtext"> / month</span>
+                                    {displayPrice(listing)} 
                                 </p>
+
+                                <button
+                                    onClick={(e) => {
+                                        e.stopPropagation()
+                                        removeBookmark(b.id)
+                                    }}
+                                >
+                                    Remove
+                                </button>
                             </div>
                         )
                     })}
                 </div>
+
+                {filteredBookmarks.length === 0 && (
+                    <p style={{ textAlign: "center", marginTop: "20px" }}>
+                        No bookmarks found
+                    </p>
+                )}
             </main>
         </div>
     )
