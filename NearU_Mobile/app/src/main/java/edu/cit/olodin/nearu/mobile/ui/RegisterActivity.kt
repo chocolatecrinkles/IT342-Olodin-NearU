@@ -63,7 +63,7 @@ class RegisterActivity : AppCompatActivity() {
                 role = role
             )
 
-            RetrofitClient.instance.register(request)
+            RetrofitClient.authApi.register(request)
                 .enqueue(object : retrofit2.Callback<Void> {
 
                     override fun onResponse(call: retrofit2.Call<Void>, response: retrofit2.Response<Void>) {

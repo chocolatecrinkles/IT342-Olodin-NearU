@@ -28,7 +28,18 @@ public class Listing {
     @Column(nullable = false)
     private String address;
 
+    @Column
     private Double price;
+
+    @Column
+    private Double minPrice;
+
+    @Column
+    private Double maxPrice;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private PricingType pricingType;
 
     private Double latitude;
     private Double longitude;

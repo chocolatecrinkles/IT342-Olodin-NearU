@@ -52,6 +52,20 @@ function OwnerListingsPage({ onSelectListing }) {
         fetchListings()
     }
 
+    const filteredListings = listings.filter(l => {
+        if (activeTab === "All") return true
+
+        if (activeTab === "Accommodation") {
+            return l.listingType === "ACCOMMODATION"
+        }
+
+        if (activeTab === "Services") {
+            return l.listingType === "SERVICE"
+        }
+
+        return true
+    })
+
     return (
         <div className="mylistings-layout">
             <header className="header">
@@ -67,7 +81,7 @@ function OwnerListingsPage({ onSelectListing }) {
 
             <main className="content-body">
                 <div className="filter-tabs">
-                    {["All", "Accomodation", "Services"].map(tab => (
+                    {["All", "Accommodation", "Services"].map(tab => (
                         <div 
                             key={tab} 
                             className={`tab ${activeTab === tab ? 'active' : ''}`}
@@ -79,7 +93,7 @@ function OwnerListingsPage({ onSelectListing }) {
                 </div>
 
                 <div className="listings-grid">
-                    {listings.map(l => (
+                    {filteredListings.map(l => (
                         <div key={l.id} className="listing-card" onClick={() => navigate(`/businessowner/list/${l.id}`)} style={{ cursor: "pointer" }}>
                             {editingId === l.id ? (
                                 <div className="edit-form-overlay">
@@ -103,6 +117,12 @@ function OwnerListingsPage({ onSelectListing }) {
                         </div>
                     ))}
                 </div>
+
+                {filteredListings.length === 0 && (
+                    <p style={{ textAlign: "center", marginTop: "20px" }}>
+                        No listings found
+                    </p>
+                )}
             </main>
         </div>
     )

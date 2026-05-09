@@ -1,5 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <color name="nearu_blue_header">#D8E2F3</color>
+    <color name="nearu_dark_blue">#4A5D79</color>
+    <color name="nearu_card_bg">#E5EAF0</color>
+    <color name="nearu_btn_light_blue">#DDE5EE</color>
+    <color name="nearu_text_gray">#777777</color>
 </resources>

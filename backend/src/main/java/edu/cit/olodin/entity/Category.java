@@ -5,5 +5,6 @@ public enum Category {
     DORM,
     RESTAURANT,
     CAFE,
-    LAUNDROMAT
+    LAUNDROMAT,
+    OTHER
 }

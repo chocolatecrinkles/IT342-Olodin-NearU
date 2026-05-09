@@ -1,12 +1,32 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import BusinessOwnerListings from "./BusinessOwnerListings";
 import ListingDetail from "./ListingDetail";
-import "./css/BusinessOwnerDashboard.css"; 
+import "./css/BusinessOwnerDashboard.css";   
+import MapView from "./MapView"
 
 function BusinessOwnerDashboard() {
   const navigate = useNavigate();
+  const [listings, setListings] = useState([]);
   const [selectedListingId, setSelectedListingId] = useState(null);
+
+  useEffect(() => {
+  fetch("http://localhost:8080/api/listings/my", {
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("token")
+    }
+  })
+    .then(res => res.json())
+    .then(data => {
+      if (Array.isArray(data)) {
+        setListings(data);
+      } else if (Array.isArray(data.data)) {
+        setListings(data.data);
+      } else {
+        setListings([]); // fallback
+      }
+    });
+}, []);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -51,7 +71,12 @@ function BusinessOwnerDashboard() {
           )}
         </aside>
 
-        <section className="map-view"></section>
+        <section className="map-view">
+          <MapView 
+            listings={listings}
+            selectedListingId={selectedListingId} 
+          />
+        </section>
       </main>
     </div>
   );

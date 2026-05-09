@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+
+    id("kotlin-kapt")
 }
 
 android {
@@ -46,6 +48,18 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:retrofit:2.9.0") //api
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+
+    implementation("androidx.recyclerview:recyclerview:1.3.2")
+
+    implementation("com.github.bumptech.glide:glide:4.16.0") //images
+    kapt("com.github.bumptech.glide:compiler:4.16.0")
+
+    implementation("com.squareup.okhttp3:okhttp:4.12.0") //token
+
+    implementation("com.google.android.gms:play-services-maps:18.2.0") //map
+    implementation("com.google.android.gms:play-services-location:21.0.1")
+
+    implementation("androidx.coordinatorlayout:coordinatorlayout:1.2.0") //bottom sheet
 }

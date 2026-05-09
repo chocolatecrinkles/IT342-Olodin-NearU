@@ -3,6 +3,7 @@ import { useState } from "react";
 import { login } from "../services/authService";
 import { jwtDecode } from "jwt-decode";
 import "./css/Login.css";
+import { GoogleLogin } from "@react-oauth/google";
 
 export function getUserFromToken() {
   const token = localStorage.getItem("token");
@@ -35,6 +36,50 @@ function Login() {
       }
     } catch (err) {
       alert(err.message);
+    }
+  };
+  
+
+  const handleGoogleLogin = async (response) => {
+    try {
+      if (!response.credential) {
+        alert("Google login failed");
+        return;
+      }
+
+      const token = response.credential;
+
+      const res = await fetch("http://localhost:8080/api/auth/google", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ token })
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        localStorage.setItem("token", data.token);
+        console.log("Google response:", data);
+
+        if (data.newUser) {
+          navigate("/select-role")
+        } else {
+          if (data.role === "STUDENT") {
+            navigate("/student");
+          } else {
+            navigate("/businessowner");
+          }
+        }
+        
+        
+      } else {
+        alert(data.message || "Google login failed");
+      }
+
+    } catch (err) {
+      console.error(err);
+      alert("Something went wrong");
     }
   };
 
@@ -74,6 +119,16 @@ function Login() {
               </span>
             </p>
           </form>
+
+          <GoogleLogin
+              onSuccess={credentialResponse => {
+              console.log(credentialResponse);
+              handleGoogleLogin(credentialResponse);
+            }}
+            onError={() => {
+              console.log("Login Failed");
+            }}
+          />
         </div>
       </main>
     </div>

@@ -36,7 +36,7 @@ public class BookmarkService {
 
         bookmarkRepository.findByUserIdAndListingId(user.getId(), listingId)
                 .ifPresent( b-> {
-                    throw new RuntimeException("Already bookmarked");
+                    throw new AuthException("Listing already bookmarked", "BOOKMARK_EXISTS");
                 });
 
         Bookmark bookmark = new Bookmark();
@@ -52,6 +52,21 @@ public class BookmarkService {
     }
 
     public void removeBookmark(Long id) {
-        bookmarkRepository.deleteById(id);
+        User user = getCurrentUser();
+
+        Bookmark bookmark = bookmarkRepository.findById(id)
+                .orElseThrow(() -> new AuthException(
+                        "Bookmark not found",
+                        "BOOKMARK_NOT_FOUND"
+                ));
+
+        if (!bookmark.getUserId().equals(user.getId())) {
+            throw new AuthException(
+                    "You are not allowed to delete this bookmark",
+                    "AUTH_UNAUTHORIZED"
+            );
+        }
+
+        bookmarkRepository.delete(bookmark);
     }
 }

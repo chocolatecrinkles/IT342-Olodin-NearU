@@ -40,22 +40,77 @@ public class ListingService {
                 .orElseThrow(() -> new AuthException("User not found", "AUTH_USER_NOT_FOUND"));
     }
 
+    private void validateCategoryAndType(Type type, Category category) {
+        if (type == Type.ACCOMMODATION) {
+            if (!(category == Category.BOARDING_HOUSE || category == Category.DORM)) {
+                throw new AuthException("Invalid category for ACCOMMODATION", "VALIDATION_ERROR");
+            }
+        }
+
+        if (type == Type.SERVICE) {
+            if (!(category == Category.RESTAURANT || category == Category.CAFE || category == Category.LAUNDROMAT)) {
+                throw new AuthException("Invalid category for SERVICE", "VALIDATION_ERROR");
+            }
+        }
+
+        if (type == Type.OTHER) {
+            if (category != Category.OTHER) {
+                throw new AuthException("OTHER type must use OTHER category", "VALIDATION_ERROR");
+            }
+        }
+    }
+
+    private void validatePricing(ListingRequest req) {
+        PricingType pricingType = PricingType.valueOf(req.pricingType);
+
+        if (pricingType == PricingType.RANGE) {
+            if (req.minPrice == null || req.maxPrice == null) {
+                throw new AuthException("Range pricing requires minPrice and maxPrice", "VALIDATION_ERROR");
+            }
+
+            if (req.minPrice > req.maxPrice) {
+                throw new AuthException("minPrice cannot be greater than maxPrice", "VALIDATION_ERROR");
+            }
+        } else {
+            if (req.price == null || req.price <= 0) {
+                throw new RuntimeException("Price must be greater than 0");
+            }
+        }
+    }
+
     public Listing createListing(ListingRequest req) {
 
         User user = getCurrentUser();
         System.out.println("User: " + user.getId());
 
+        Type type = Type.valueOf(req.listingType);
+        Category category = Category.valueOf(req.category);
+        PricingType pricingType = PricingType.valueOf(req.pricingType);
+
+        validateCategoryAndType(type, category);
+        validatePricing(req);
+
         Listing listing = new Listing();
         listing.setName(req.name);
-        listing.setCategory(Category.valueOf(req.category));
-        listing.setListingType(Type.valueOf(req.listingType));
+        listing.setListingType(type);
+        listing.setCategory(category);
         listing.setAddress(req.address);
+        listing.setPricingType(pricingType);
         listing.setPrice(req.price);
+        listing.setMinPrice(req.minPrice);
+        listing.setMaxPrice(req.maxPrice);
         listing.setLatitude(req.latitude);
         listing.setLongitude(req.longitude);
         listing.setDescription(req.description);
 
         listing.setOwnerId(user.getId());
+
+        if (pricingType == PricingType.RANGE) {
+            listing.setPrice(null);
+        } else {
+            listing.setMinPrice(null);
+            listing.setMaxPrice(null);
+        }
         return listingRepository.save(listing);
     }
 
@@ -85,13 +140,31 @@ public class ListingService {
             );
         }
 
+        Type type = Type.valueOf(req.listingType);
+        Category category = Category.valueOf(req.category);
+        PricingType pricingType = PricingType.valueOf(req.pricingType);
+
+        validateCategoryAndType(type, category);
+        validatePricing(req);
+
         listing.setName(req.name);
-        listing.setCategory(Category.valueOf(req.category));
+        listing.setListingType(type);
+        listing.setCategory(category);
         listing.setAddress(req.address);
+        listing.setPricingType(pricingType);
         listing.setPrice(req.price);
+        listing.setMinPrice(req.minPrice);
+        listing.setMaxPrice(req.maxPrice);
         listing.setLatitude(req.latitude);
         listing.setLongitude(req.longitude);
         listing.setDescription(req.description);
+
+        if (pricingType == PricingType.RANGE) {
+            listing.setPrice(null);
+        } else {
+            listing.setMinPrice(null);
+            listing.setMaxPrice(null);
+        }
 
         return listingRepository.save(listing);
     }
@@ -118,7 +191,7 @@ public class ListingService {
     public List<String> uploadImages(Long listingId, List<MultipartFile> files) {
 
         if (files.size() > 15) {
-            throw new RuntimeException("Maximum 15 images allowed");
+            throw new AuthException("Maximum 15 images allowed", "VALIDATION_ERROR");
         }
 
         List<String> uploadedPaths = new ArrayList<>();
@@ -126,7 +199,7 @@ public class ListingService {
         for (MultipartFile file : files) {
 
             if (!file.getContentType().startsWith("image/")) {
-                throw new RuntimeException("Only image files allowed");
+                throw new AuthException("Only image files allowed", "VALIDATION_ERROR");
             }
 
             String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
@@ -145,7 +218,7 @@ public class ListingService {
                 uploadedPaths.add(img.getImageUrl());
 
             } catch (IOException e) {
-                throw new RuntimeException("Upload failed");
+                throw new AuthException("Upload failed", "UPLOAD_ERROR");
             }
         }
 
@@ -156,13 +229,35 @@ public class ListingService {
         return listingImageRepository.findByListingId(listingId);
     }
 
-    public List<Listing> getFilteredListings(String category, Double minPrice, Double maxPrice) {
+    public List<Listing> getFilteredListings(String category, Double minPrice, Double maxPrice, String keyword) {
         List<Listing> listings = listingRepository.findAll();
 
         return listings.stream()
                 .filter(l -> category == null || l.getCategory().name().equalsIgnoreCase(category))
-                .filter(l -> minPrice == null || l.getPrice() >= minPrice)
-                .filter(l -> maxPrice == null || l.getPrice() <= maxPrice)
+                .filter(l -> {
+                    if (keyword == null || keyword.isEmpty()) return true;
+                    String kw = keyword.toLowerCase();
+                    return (l.getName() != null && l.getName().toLowerCase().contains(kw)) ||
+                           (l.getAddress() != null && l.getAddress().toLowerCase().contains(kw));
+                })
+                .filter(l -> {
+                    if (minPrice == null) return true;
+
+                    if (l.getPricingType() == PricingType.RANGE) {
+                        return l.getMaxPrice() >= minPrice;
+                    } else {
+                        return l.getPrice() >= minPrice;
+                    }
+                })
+                .filter(l -> {
+                    if (maxPrice == null) return true;
+
+                    if (l.getPricingType() == PricingType.RANGE) {
+                        return l.getMinPrice() <= maxPrice;
+                    } else {
+                        return l.getPrice() <= maxPrice;
+                    }
+                })
                 .toList();
     }
 }

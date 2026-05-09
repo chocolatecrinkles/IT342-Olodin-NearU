@@ -171,3 +171,19 @@ body, html {
   margin-top: 15px;
   text-align: left;
 }
+
+.price-filters {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.price-select {
+  flex: 1;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+  background: white;
+  cursor: pointer;
+}

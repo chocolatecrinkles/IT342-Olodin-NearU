@@ -32,9 +32,10 @@ public class ListingController {
     public List<Listing> getAllListings(
             @RequestParam(required = false) String category,
             @RequestParam(required = false) Double minPrice,
-            @RequestParam(required = false) Double maxPrice
+            @RequestParam(required = false) Double maxPrice,
+            @RequestParam(required = false) String keyword
     ) {
-        return listingService.getFilteredListings(category, minPrice, maxPrice);
+        return listingService.getFilteredListings(category, minPrice, maxPrice, keyword);
     }
 
     @GetMapping("/my")
