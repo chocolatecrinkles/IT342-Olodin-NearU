@@ -1,0 +1,15 @@
+package edu.cit.olodin.feature.listing;
+
+public class ListingRequest {
+    public String name;
+    public String category;
+    public String listingType;
+    public String address;
+    public Double price;
+    public Double minPrice;
+    public Double maxPrice;
+    public String pricingType;
+    public Double latitude;
+    public Double longitude;
+    public String description;
+}

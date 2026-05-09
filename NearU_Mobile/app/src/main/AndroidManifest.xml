@@ -23,7 +23,7 @@
             android:value="AIzaSyBjCMND-5mly6qfA5aNwZaqvfRRNtwePEA"/>
 
         <activity
-            android:name=".ui.LoginActivity"
+            android:name=".feature.auth.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -32,25 +32,25 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.MainActivity" />
+        <activity android:name=".feature.student.StudentMainActivity" />
 
-        <activity android:name=".ui.RegisterActivity" />
+        <activity android:name=".feature.auth.RegisterActivity" />
 
-        <activity android:name=".ui.ListingDetailActivity" />
+        <activity android:name=".feature.listing.ListingDetailActivity" />
 
-        <activity android:name=".ui.BookmarkActivity"/>
-
-        <activity
-            android:name=".ui.BusinessOwnerMainActivity"/>
+        <activity android:name=".feature.bookmark.BookmarkActivity"/>
 
         <activity
-            android:name=".ui.AddListingActivity"/>
+            android:name=".feature.businessowner.BusinessOwnerMainActivity"/>
 
         <activity
-            android:name=".ui.BusinessOwnerListingsActivity"/>
+            android:name=".feature.listing.AddListingActivity"/>
 
         <activity
-            android:name=".ui.ProfileActivity"/>
+            android:name=".feature.businessowner.BusinessOwnerListingsActivity"/>
+
+        <activity
+            android:name=".feature.auth.ProfileActivity"/>
 
     </application>
 
