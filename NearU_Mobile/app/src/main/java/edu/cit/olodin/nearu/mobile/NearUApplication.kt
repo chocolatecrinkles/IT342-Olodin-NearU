@@ -1,7 +1,7 @@
 package edu.cit.olodin.nearu.mobile
 
 import android.app.Application
-import edu.cit.olodin.nearu.mobile.api.RetrofitClient
+import edu.cit.olodin.nearu.mobile.shared.api.RetrofitClient
 
 class NearUApplication : Application() {
 

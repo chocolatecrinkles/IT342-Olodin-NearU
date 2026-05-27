@@ -1,6 +1,6 @@
 package edu.cit.olodin.security;
 
-import edu.cit.olodin.entity.Role;
+import edu.cit.olodin.feature.user.Role;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

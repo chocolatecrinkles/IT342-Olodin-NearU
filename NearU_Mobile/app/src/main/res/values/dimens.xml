@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="nearu_screen_padding">16dp</dimen>
+    <dimen name="nearu_card_padding">16dp</dimen>
+    <dimen name="nearu_card_padding_large">18dp</dimen>
+    <dimen name="nearu_card_radius">18dp</dimen>
+    <dimen name="nearu_inner_radius">8dp</dimen>
+    <dimen name="nearu_section_gap">14dp</dimen>
+    <dimen name="nearu_button_height">48dp</dimen>
+    <dimen name="nearu_header_height">64dp</dimen>
+    <dimen name="nearu_icon_button_size">42dp</dimen>
+    <dimen name="nearu_card_elevation">3dp</dimen>
+</resources>
