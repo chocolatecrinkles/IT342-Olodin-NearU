@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/nearu_background">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="80dp"
+        android:clipToPadding="false">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="@color/nearu_surface"
+            app:cardCornerRadius="18dp"
+            app:cardElevation="3dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/nearu_header_height"
+                    android:layout_marginBottom="20dp">
+
+                    <ImageButton
+                        android:id="@+id/backBtn"
+                        android:layout_width="@dimen/nearu_icon_button_size"
+                        android:layout_height="@dimen/nearu_icon_button_size"
+                        android:layout_centerVertical="true"
+                        android:background="@drawable/white_input_bg"
+                        android:elevation="2dp"
+                        android:src="@drawable/ic_arrow_left" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:text="Edit Listing"
+                        android:textColor="@color/nearu_text_main"
+                        android:textSize="22sp"
+                        android:textStyle="bold" />
+
+                    <ImageButton
+                        android:id="@+id/btnMenu"
+                        android:layout_width="@dimen/nearu_icon_button_size"
+                        android:layout_height="@dimen/nearu_icon_button_size"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:background="@drawable/white_input_bg"
+                        android:elevation="2dp"
+                        android:src="@drawable/ic_menu" />
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/nearu_panel"
+                    android:orientation="vertical"
+                    android:padding="20dp"
+                    android:elevation="2dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Name"
+                        android:textStyle="bold"
+                        android:textColor="@color/nearu_text_main"/>
+
+                    <EditText
+                        android:id="@+id/nameInput"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="8dp"
+                        android:hint="Enter listing name"
+                        android:textSize="16sp"/>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/nearu_divider"
+                        android:layout_marginBottom="15dp"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="20dp">
+
+                        <Spinner
+                            android:id="@+id/typeSpinner"
+                            android:layout_width="0dp"
+                            android:layout_height="40dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/spinner_bg_gray"
+                            android:layout_marginRight="8dp"/>
+
+                        <Spinner
+                            android:id="@+id/categorySpinner"
+                            android:layout_width="0dp"
+                            android:layout_height="40dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/spinner_bg_gray"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="20dp">
+
+                        <ImageButton
+                            android:id="@+id/selectImagesBtn"
+                            android:layout_width="0dp"
+                            android:layout_height="180dp"
+                            android:layout_weight="2"
+                            android:background="@drawable/image_placeholder_bg"
+                            android:scaleType="centerInside"
+                            android:layout_marginRight="10dp"/>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="180dp"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+                            <View android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" android:background="@drawable/image_placeholder_bg" android:layout_marginBottom="10dp"/>
+                            <View android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" android:background="@drawable/image_placeholder_bg"/>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/imageCountText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0 images selected"
+                        android:layout_marginBottom="15dp"
+                        android:textSize="12sp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Pricing"
+                        android:textStyle="bold"
+                        android:textColor="@color/nearu_text_main"
+                        android:layout_marginTop="10dp"/>
+
+                    <Spinner
+                        android:id="@+id/pricingSpinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="10dp"
+                        android:background="@drawable/spinner_bg_gray"/>
+
+                    <LinearLayout
+                        android:id="@+id/priceContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <EditText
+                            android:id="@+id/priceInput"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@null"
+                            android:hint="₱ 00,000"
+                            android:inputType="numberDecimal"
+                            android:paddingTop="8dp"
+                            android:paddingBottom="8dp"/>
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/nearu_divider"
+                            android:layout_marginBottom="15dp"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/rangeContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:visibility="gone">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+                            <EditText
+                                android:id="@+id/minPriceInput"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@null"
+                                android:hint="Min ₱"
+                                android:inputType="numberDecimal"
+                                android:paddingBottom="8dp"/>
+
+                            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/nearu_divider"/>
+                        </LinearLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=" - "
+                            android:padding="10dp"/>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+                            <EditText
+                                android:id="@+id/maxPriceInput"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@null"
+                                android:hint="Max ₱"
+                                android:inputType="numberDecimal"
+                                android:paddingBottom="8dp"/>
+                            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/nearu_divider"/>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Description"
+                        android:textStyle="bold"
+                        android:textColor="@color/nearu_text_main"/>
+
+                    <EditText
+                        android:id="@+id/descriptionInput"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        android:hint="Tell us more about your listing..."
+                        android:paddingTop="8dp"
+                        android:paddingBottom="8dp"
+                        android:lines="3"/>
+
+                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/nearu_divider" android:layout_marginBottom="20dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Address"
+                        android:textStyle="bold"
+                        android:textColor="@color/nearu_text_main"/>
+
+                    <fragment
+                        android:id="@+id/mapFragment"
+                        android:name="com.google.android.gms.maps.SupportMapFragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="150dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"/>
+
+                    <EditText
+                        android:id="@+id/addressInput"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        android:hint="Address"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="8dp"/>
+
+                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/nearu_divider"/>
+                    <TextView android:id="@+id/selectedCoordinates" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textSize="10sp" android:paddingTop="4dp"/>
+
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+    </ScrollView>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/createBtn"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_gravity="bottom"
+        android:layout_margin="20dp"
+        android:text="SAVE CHANGES"
+        android:textColor="@color/nearu_secondary"
+        android:textStyle="bold"
+        app:backgroundTint="@color/nearu_secondary_light"
+        app:cornerRadius="8dp"/>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

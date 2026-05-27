@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="NearUTextAppearance" parent="TextAppearance.Material3.BodyMedium">
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="fontFamily">sans-serif</item>
+        <item name="android:textColor">@color/nearu_text_main</item>
+    </style>
+
+    <style name="NearUButtonStyle" parent="Widget.Material3.Button">
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="fontFamily">sans-serif</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textStyle">bold</item>
+        <item name="backgroundTint">@color/nearu_primary</item>
+        <item name="android:textColor">@color/nearu_accent_text</item>
+    </style>
+
+    <style name="NearUTabText">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="fontFamily">sans-serif</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+</resources>

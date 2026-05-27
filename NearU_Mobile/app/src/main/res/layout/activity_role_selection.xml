@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/nearu_background"
+    android:orientation="vertical"
+    android:padding="@dimen/nearu_screen_padding">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/nearu_header_height"
+        app:cardBackgroundColor="@color/nearu_surface"
+        app:cardCornerRadius="@dimen/nearu_card_radius"
+        app:cardElevation="@dimen/nearu_card_elevation">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingHorizontal="@dimen/nearu_card_padding">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="NearU"
+                android:textColor="@color/nearu_text_main"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/nearu_section_gap"
+        app:cardBackgroundColor="@color/nearu_surface"
+        app:cardCornerRadius="@dimen/nearu_card_radius"
+        app:cardElevation="@dimen/nearu_card_elevation">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="30dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/select_role_title"
+                android:textColor="@color/nearu_accent_text"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/select_role_subtitle"
+                android:textColor="@color/nearu_text_muted"
+                android:textSize="14sp" />
+
+            <Button
+                android:id="@+id/studentRoleBtn"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginTop="24dp"
+                android:text="@string/student_role"
+                android:textAllCaps="false"
+                android:textColor="@color/nearu_accent_text"
+                android:textStyle="bold"
+                app:backgroundTint="@color/nearu_primary" />
+
+            <Button
+                android:id="@+id/businessOwnerRoleBtn"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginTop="12dp"
+                android:text="@string/business_owner_role"
+                android:textAllCaps="false"
+                android:textColor="@color/nearu_secondary"
+                android:textStyle="bold"
+                app:backgroundTint="@color/nearu_secondary_light" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</LinearLayout>
